@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "A utility to print out the Ionic project's build stack. It will print global stack info for any dependencies that aren't installed locally.",
   "bin": {
-    "ionic-build-info": "./bin/ionic-build-info",
-    "ionicbs": "./bin/ionic-build-info",
-    "ionic-build-stack": "./bin/ionic-build-info"
+    "ionic-build-info": "bin/ionic-build-info",
+    "ionicbs": "bin/ionic-build-info",
+    "ionic-build-stack": "bin/ionic-build-info"
   },
   "author": "Byron Altice",
   "license": "ISC",
   "dependencies": {}
 }
-
