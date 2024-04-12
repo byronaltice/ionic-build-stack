@@ -1,0 +1,57 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const { execSync } = require('child_process');
+
+// Function to execute a shell command and return its output
+function execCommand(command) {
+  try {
+    return execSync(command).toString().trim();
+  } catch (error) {
+    return 'Not available';
+  }
+}
+
+// Reads the content of 'package.json' into an object
+function readPackageJson() {
+  const packageJsonPath = './package.json';
+  if (!fs.existsSync(packageJsonPath)) {
+    console.error('package.json not found in the current directory.');
+    process.exit(1);
+  }
+  return JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+}
+
+// Extract specific dependencies versions
+function extractVersions(packageJson) {
+  const keysToExtract = ['@angular/core', '@ionic/angular', 'react', '@ionic/react', 'cordova', '@capacitor/core'];
+  const extracted = {};
+
+  keysToExtract.forEach(key => {
+    if (packageJson.dependencies[key]) {
+      extracted[key] = packageJson.dependencies[key];
+    } else if (packageJson.devDependencies[key]) {
+      extracted[key] = packageJson.devDependencies[key];
+    }
+  });
+
+  return extracted;
+}
+
+const packageJson = readPackageJson();
+const relevantVersions = extractVersions(packageJson);
+
+// Getting environment versions
+const nodeVersion = execCommand('node -v');
+const npmVersion = execCommand('npm -v');
+const ionicVersion = execCommand('ionic -v');
+
+console.log('Ionic Project Build Stack:');
+console.log(`Node.js: ${nodeVersion}`);
+console.log(`npm: ${npmVersion}`);
+console.log(`Ionic CLI: ${ionicVersion}`);
+
+Object.keys(relevantVersions).forEach((key) => {
+  console.log(`${key}: ${relevantVersions[key]}`);
+});
+
